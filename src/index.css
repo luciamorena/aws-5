@@ -1,7 +1,7 @@
 :root {
   --Background: #242424;
   --corBackground: #ddd;
-  --corHover: green;
+  --corHover: rgba(0,0,0,.5);
 }
 
 * {
@@ -12,14 +12,14 @@
   user-select: none;
 }
 
-body {
+.container {
   display: grid;
   place-items: center;
   height: 100vh;
-  background: var(--Background);
+  /* background: var(--Background); */
 }
 
-.container {
+.box {
   /* font-size: 3rem; */
   padding: 2rem;
   background: var(--corBackground);
@@ -27,7 +27,7 @@ body {
   text-align: center;
 }
 
-.container:hover {
+.box:hover {
   background: var(--corHover);
   color:white;
 }
