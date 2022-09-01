@@ -1,0 +1,59 @@
+name: DEPLOY - MAIN
+
+# on: [push]
+# on:
+  # push:
+  # workflow_dispatch:
+on:
+  push:
+    branches: ["*"]
+
+jobs:
+
+  master:
+    # if: false
+    # if: ${{ false }}
+    # if: ${{github.ref == 'refs/heads/main' && github.repository == 'luciamorena/aws-5'}}
+    # if: ${{github.ref == 'refs/heads/main' && github.event_name == 'push'}}
+    runs-on: ubuntu-latest
+    # environment:
+      # name: prod
+      # url: 'http://ilsonfilho.tk'
+    steps:
+      - name: RUN MASTER
+        run: echo 'RUN MASTER'
+
+  prod:
+    if: ${{github.ref == 'refs/heads/main' && github.event_name == 'push'}}
+    runs-on: ubuntu-latest
+    needs: master
+
+    environment:
+      name: prod
+      url: 'http://prod.ilsonfilho.tk'
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Install Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16.x'
+    - name: Install npm dependencies
+      run: npm install
+    - name: Run build task
+      run: npm run build --if-present
+    - name: Deploy to Server
+      uses: easingthemes/ssh-deploy@main
+      env:
+          SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY }}
+          ARGS: "-rltgoDzvO --delete"
+          SOURCE: "dist/"
+          # SOURCE: "/"
+          # SOURCE: "index.html"
+          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+          REMOTE_USER: ${{ secrets.REMOTE_USER }}
+          # TARGET: ${{ secrets.REMOTE_TARGET }}
+          TARGET: "/home/ubuntu/sistema/frontend/prod"
+          # EXCLUDE: "/dist/, /node_modules/"
+    - name: DEPLOY FIM
+      run: echo 'FIM DO DEPLOY'
