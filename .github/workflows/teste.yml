@@ -42,7 +42,7 @@ jobs:
       run: npm install
     - name: Run build task
       run: npm run build --if-present
-    - name: Deploy to Server
+    - name: Deploy to Server PROD
       uses: easingthemes/ssh-deploy@main
       env:
           SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY }}
@@ -55,5 +55,42 @@ jobs:
           # TARGET: ${{ secrets.REMOTE_TARGET }}
           TARGET: "/home/ubuntu/sistema/frontend/prod"
           # EXCLUDE: "/dist/, /node_modules/"
-    - name: DEPLOY FIM
-      run: echo 'FIM DO DEPLOY'
+    - name: DEPLOY FIM PROD
+      run: echo 'FIM DO DEPLOY PROD'
+
+
+  hmg:
+    if: ${{github.ref == 'refs/heads/main' && github.event_name == 'push'}}
+    runs-on: ubuntu-latest
+    needs: master
+
+    environment:
+      name: hmg
+      url: 'http://hmg.ilsonfilho.tk'
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Install Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16.x'
+    - name: Install npm dependencies
+      run: npm install
+    - name: Run build task
+      run: npm run build --if-present
+    - name: Deploy to Server HMG
+      uses: easingthemes/ssh-deploy@main
+      env:
+          SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY }}
+          ARGS: "-rltgoDzvO --delete"
+          SOURCE: "dist/"
+          # SOURCE: "/"
+          # SOURCE: "index.html"
+          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+          REMOTE_USER: ${{ secrets.REMOTE_USER }}
+          # TARGET: ${{ secrets.REMOTE_TARGET }}
+          TARGET: "/home/ubuntu/sistema/frontend/hmg"
+          # EXCLUDE: "/dist/, /node_modules/"
+    - name: DEPLOY FIM HMG
+      run: echo 'FIM DO DEPLOY HMG'
+
