@@ -2,7 +2,7 @@ import React,{useState,useEffect} from 'react'
 
 function App() {
   const [valor,setValor] = useState(0)
-  const [cor,setCor] = useState('yellow')
+  const [cor,setCor] = useState(null)
   const [tipo,setTipo] = useState('PROD')
 
   const alterar = () => setValor((Math.random() * 10000000).toFixed())

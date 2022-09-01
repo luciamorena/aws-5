@@ -16,12 +16,12 @@
   display: grid;
   place-items: center;
   height: 100vh;
-  /* background: var(--Background); */
+  background: var(--Background);
 }
 
 .box {
   /* font-size: 3rem; */
-  padding: 2rem;
+  padding: 2rem 4rem;
   background: var(--corBackground);
   border-radius: 8px;
   text-align: center;
